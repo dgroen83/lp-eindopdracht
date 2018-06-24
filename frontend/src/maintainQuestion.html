@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Opvoeren enquete vragen</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        <!-- Ophalen naam van de ingelogde gebruiker -->
+        var result;
+        result = localStorage.getItem(name);
+    </script>
+
+    <script>
+    $(document).ready(function () {
+        $('#Opslaan').click(function (e) {
+            e.preventDefault();
+
+            var $results = $('#message'),
+                question = $('#txt-question').val(),
+                category = $('#txt-category').val();
+            let answertype = $('#sel-answertype').val();
+
+            console.log(question + ', ' + category + ', ' + answertype);
+
+            $.ajax({
+                url: "http://localhost:8080/question/add",
+                type: "POST",
+                data: JSON.stringify({question: question, category: category, answerType: {id: answertype}}),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (data, textStatus, xhr) {
+                    // alert(xhr.status);
+                    $("#message").empty().append(data);
+                },
+                error: function (data, textStatus, xhr) {
+                    // alert(data.responseText);
+                    $results.empty().append(data.responseText);
+
+                }
+            })
+        })
+        $('#Annuleren').click(function (e) {
+
+            alert("Annuleren")
+            e.preventDefault();
+        })
+
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            let select = $('#sel-answertype');
+
+            select.append('<option selected disabled>Voer antwoordsoort in</option>');
+
+            $.ajax({
+                url: "http://localhost:8080/answertype/all",
+                type: "GET",
+                // data: ,
+                success: function (data) {
+                    $.each(data, function (key, val) {
+                        select.append($('<option></option>').attr('value', val.id).text(val.answertype + ", " + val.answersubtype));
+                        console.log("id, "+val.id)
+                    })
+                },
+            })
+        });
+    </script>
+    <style>
+        #message {
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <script>
+                    document.writeln(result);
+                </script>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Gebruiker</a></li>
+                <li><a href="#">Enquête</a></li>
+                <li><a href="#">Team</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- First Container -->
+<div class="container-fluid bg-1 text-center">
+    <div class="container">
+        <form class="form-horizontal" action="" id="add_question">
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="visible-lg" src="images/vvHoogezand.png"/>
+                    <img class="visible-md" src="images/vvHoogezand.png"/>
+                    <img class="visible-sm img-fluid" src="images/vvHoogezandsmall.png" style="float: right"/>
+                    <img class="visible-xs img-fluid" src="images/vvHoogezandsmall.png" style="float: right"/>
+                </div>
+                <div class="col-md-8" >
+                    <h2 style="margin-bottom: 30px">Opvoeren enquete vragen</h2>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="txt-question">Vraag:</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="txt-question"
+                                   placeholder="Voer vraag in"
+                                   name="question" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="txt-category">Categorie:</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="txt-category"
+                                   placeholder="Voer categorie in"
+                                   name="category" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="sel-answertype">Antwoordsoort:</label>
+                        <div class="col-md-6">
+                            <!--<select type="text" class="form-control" id="sel-answertype"-->
+                                    <!--name="answertype" required>-->
+                                <!--<option value="" selected disabled>Voer antwoordsoort in</option>>-->
+                            <select class="form-control" id="sel-answertype" name="answertype" required="required">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-11">
+                            <button type="cancel" class="btn btn-default" id="Annuleren">Annuleren</button>
+                            <button type="submit" class="btn btn-default" id="Opslaan">Opslaan</button>
+                        </div>
+                    </div>
+                </div>
+            </div> <!--row-->
+        </form>
+        <div id="message">
+            <em></em>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<footer class="container-fluid bg-4 text-center">
+    <p>Marko and David Webdesign</a></p>
+</footer>
+
+</body>
+</html>
