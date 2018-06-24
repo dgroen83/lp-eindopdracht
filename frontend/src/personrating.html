@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>rating</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="css/rating.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+
+    <script src="js/rating.js"></script>
+    <script>
+        let toBeRatedId =
+        $.ajax({
+
+            url: 'http://localhost:8080/person/personenquete?personId='+localStorage.getItem("toBeRatedId"),
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+               createTable(data)
+            },
+            error: function (requestObject, error, errorThrown) {
+                console.log("error thrown, add handler to exit gracefully");
+            },
+            timeout: 3000 //to do: research and develop further in combination with error handling
+        });
+    </script>
+    <link rel="stylesheet" href="css/test.css">
+
+
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <script>
+                    let user = localStorage.getItem("toBeRatedVoornaam") + " " + localStorage.getItem("toBeRatedAchternaam");
+                    document.writeln(user);
+                </script>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">uitloggen</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- First Container -->
+<div class="container-fluid bg-1 text-center">
+    <div class="container">
+        <form class="form-horizontal" action="" id="check_user">
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="visible-lg" src="images/vvHoogezand.png"/>
+                    <img class="visible-md" src="images/vvHoogezand.png"/>
+                    <img class="visible-sm img-fluid" src="images/vvHoogezandsmall.png" style="float: right"/>
+                    <img class="visible-xs img-fluid" src="images/vvHoogezandsmall.png" style="float: right"/>
+                </div>
+                <div class="col-sm-8">
+                    <table id="rating-table" class="table table-hover"></table>
+                    <div>
+                        <button id="save-rating" type="button" class="btn btn-info">Opslaan</button>
+                    </div>
+                </div>
+            </div> <!--row-->
+        </form>
+        <div id="password-check-results">
+            <em></em>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<footer class="container-fluid bg-4 text-center">
+    <p>Marko and David Webdesign</p>
+</footer>
+
+</body>
+</html>
